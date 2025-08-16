@@ -1,5 +1,6 @@
 import http from "node:http";
 import fs from "node:fs";
+import { documentTypes } from "./utils/mapOfDocumentTypes.js";
 
 const publicDirectory = "./public";
 
@@ -10,13 +11,21 @@ const server = http.createServer((req, res) => {
       ? `${publicDirectory}/index.html`
       : `${publicDirectory}${req.url}`;
 
-  fs.readFile(filepath, "utf-8", (err, content) => {
+  let pathArr = filepath.split(".");
+  let extension = pathArr[pathArr.length - 1];
+  let contentType = documentTypes[extension];
+
+  // ¿cual es la extension del archivo?
+  console.log("extension!!!!", extension);
+
+  fs.readFile(filepath, (err, content) => {
     if (err) {
       console.log(err);
       res.writeHead(500);
       res.end("internal server error!");
     }
-    res.writeHead(200, { "Content-Type": "text/html" });
+
+    res.writeHead(200, { "Content-Type": `${contentType ?? "text/html"}` });
     res.end(content);
   });
 });

@@ -1,0 +1,21 @@
+[{
+  "id": "1",
+  "title": "Node.js File System and HTTP Module",
+  "content": "This project demonstrates the use of Node.js's file system and HTTP modules. It includes a simple server that serves static files and handles basic file operations.",
+  "created_at": "2023-10-01T12:00:00Z",
+  "updated_at": "2023-10-01T12:00:00Z"
+}, 
+{
+  "id": "2",
+  "title": "Understanding Node.js Modules",
+  "content": "Node.js modules are reusable blocks of code that can be exported from one file and imported into another. This project illustrates how to create and use modules effectively.",
+  "created_at": "2023-10-02T12:00:00Z",
+  "updated_at": "2023-10-02T12:00:00Z"
+}, 
+{
+  "id": "3",
+  "title": "Using Nodemon for Development",
+  "content": "Nodemon is a utility that monitors for changes in your source code and automatically restarts your server. This project includes a setup for using Nodemon during development.",
+  "created_at": "2023-10-03T12:00:00Z",
+  "updated_at": "2023-10-03T12:00:00Z"
+}]
