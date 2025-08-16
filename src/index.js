@@ -4,7 +4,7 @@ import fs from "node:fs";
 const PORT = 8000;
 const server = http.createServer((req, res) => {
   if (req.url === "/index.html") {
-    fs.readFile("public/index.html", "utf-8", (err, content) => {
+    fs.readFile("./public/index.html", "utf-8", (err, content) => {
       if (err) {
         console.log(err);
         res.writeHead(500);
