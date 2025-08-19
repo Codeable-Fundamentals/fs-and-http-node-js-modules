@@ -6,6 +6,13 @@ const publicDirectory = "./public";
 
 const PORT = 8000;
 const server = http.createServer((req, res) => {
+
+  if(req.method!=='GET'){
+    res.writeHead(405)
+    res.end("Metodo no Valido")
+    return
+  }
+  
   let filepath =
     req.url === "/"
       ? `${publicDirectory}/index.html`
@@ -16,18 +23,19 @@ const server = http.createServer((req, res) => {
   let contentType = documentTypes[extension];
 
   // ¿cual es la extension del archivo?
-  console.log("extension!!!!", extension);
+  if (extension !== "ico") {
+    fs.readFile(filepath, (err, content) => {
+      if (err) {
+        console.log(err);
+        res.writeHead(500);
+        res.end("internal server error!");
+        return
+      }
 
-  fs.readFile(filepath, (err, content) => {
-    if (err) {
-      console.log(err);
-      res.writeHead(500);
-      res.end("internal server error!");
-    }
-
-    res.writeHead(200, { "Content-Type": `${contentType ?? "text/html"}` });
-    res.end(content);
-  });
+      res.writeHead(200, { "Content-Type": `${contentType ?? "text/html"}` });
+      res.end(content);
+    });
+  }
 });
 
 server.listen(PORT, () => {
