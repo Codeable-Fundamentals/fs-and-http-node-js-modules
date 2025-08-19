@@ -1,6 +1,6 @@
 export const documentTypes = {
   png: "image/png",
-  htlm: "text/html",
+  html: "text/html",
   json: "application/json",
   ico: "image/vnd.microsoft.icon"
 };

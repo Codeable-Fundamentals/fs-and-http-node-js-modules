@@ -6,13 +6,12 @@ const publicDirectory = "./public";
 
 const PORT = 8000;
 const server = http.createServer((req, res) => {
-
-  if(req.method!=='GET'){
-    res.writeHead(405)
-    res.end("Metodo no Valido")
-    return
+  if (req.method !== "GET") {
+    res.writeHead(405);
+    res.end("Metodo no Valido");
+    return;
   }
-  
+
   let filepath =
     req.url === "/"
       ? `${publicDirectory}/index.html`
@@ -20,21 +19,26 @@ const server = http.createServer((req, res) => {
 
   let pathArr = filepath.split(".");
   let extension = pathArr[pathArr.length - 1];
+
   let contentType = documentTypes[extension];
 
   // ¿cual es la extension del archivo?
   if (extension !== "ico") {
-    fs.readFile(filepath, (err, content) => {
-      if (err) {
-        console.log(err);
-        res.writeHead(500);
-        res.end("internal server error!");
-        return
-      }
+    const stream = fs.createReadStream(filepath);
 
-      res.writeHead(200, { "Content-Type": `${contentType ?? "text/html"}` });
-      res.end(content);
+    stream.on("error", (error) => {
+      if (error.code == "ENOENT") {
+        res.writeHead(404);
+        res.end("Not Found");
+        return;
+      } else {
+        res.writeHead(500);
+        res.end("Internal Server Error");
+        return;
+      }
     });
+    res.writeHead(200, { "Content-Type": contentType});
+    stream.pipe(res);
   }
 });
 
