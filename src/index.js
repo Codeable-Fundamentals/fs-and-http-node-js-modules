@@ -5,6 +5,9 @@ import { documentTypes } from "./utils/mapOfDocumentTypes.js";
 const publicDirectory = "./public";
 
 const PORT = 8000;
+// Determinamos el límite para usar streams
+const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1 MB
+
 const server = http.createServer((req, res) => {
   if (req.method !== "GET") {
     res.writeHead(405);
@@ -26,6 +29,20 @@ const server = http.createServer((req, res) => {
   if (extension !== "ico") {
     const stream = fs.createReadStream(filepath);
 
+    fs.stat(filepath, (err, stats) => {
+      if (err) {
+        console.log(err);
+        if (err.code === "ENOENT") {
+          res.writeHead(404);
+          res.end("Not Found");
+        } else {
+          res.writeHead(500);
+          res.end("Server Error");
+        }
+        return;
+      }
+    });
+    
     stream.on("error", (error) => {
       if (error.code == "ENOENT") {
         res.writeHead(404);
@@ -37,7 +54,7 @@ const server = http.createServer((req, res) => {
         return;
       }
     });
-    res.writeHead(200, { "Content-Type": contentType});
+    res.writeHead(200, { "Content-Type": contentType });
     stream.pipe(res);
   }
 });
